@@ -1,0 +1,26 @@
+{
+  "Platform": [
+    {"platformId":"android","name":"Android","status":"active"},
+    {"platformId":"apple","name":"Apple","status":"active"},
+    {"platformId":"linux","name":"Linux","status":"active"},
+    {"platformId":"windows","name":"Windows","status":"active"},
+    {"platformId":"online","name":"Online","description":"Available through web browsers","status":"active"}
+  ],
+  "Stamp": [
+    {"stampId":"verified-best","name":"Verified best software","signal":"positive","status":"active"},
+    {"stampId":"proprietary","name":"Proprietary","signal":"warning","status":"active"},
+    {"stampId":"top-choice","name":"Top choice","signal":"positive","status":"active"},
+    {"stampId":"favorite","name":"Personal favorite","signal":"positive","status":"active"},
+    {"stampId":"used-inspected","name":"Used and inspected","signal":"positive","status":"active"},
+    {"stampId":"outdated-abandoned","name":"Outdated or abandoned","signal":"warning","status":"active"},
+    {"stampId":"needs-improvement","name":"Needs improvement","signal":"warning","status":"active"}
+  ],
+  "Policy": [
+    {"policyId":"catalog-review","name":"Catalog Review","description":"Material lifecycle or trust-state changes require review.","enforcement":"approval-required","status":"active"},
+    {"policyId":"provenance-required","name":"Provenance Required","description":"Catalog facts should retain a resolvable source or homepage where available.","enforcement":"advisory","status":"active"},
+    {"policyId":"restricted-capability-review","name":"Restricted Capability Review","description":"Tools tagged with restricted capabilities require explicit authorization in consuming applications before execution.","enforcement":"approval-required","status":"active"}
+  ],
+  "Source": [
+    {"sourceId":"toybox-readme","name":"Toybox README","sourceType":"catalog","sourceUrl":"https://github.com/sonoxo/toybox/blob/main/README.md","status":"active"}
+  ]
+}
