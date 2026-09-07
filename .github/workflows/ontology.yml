@@ -1,0 +1,43 @@
+name: Ontology Validation
+
+on:
+  push:
+    paths:
+      - "README.md"
+      - "ONTOLOGY.md"
+      - "ontology/**"
+      - "scripts/ingest_readme.py"
+      - "scripts/validate_ontology.py"
+      - ".github/workflows/ontology.yml"
+  pull_request:
+    paths:
+      - "README.md"
+      - "ONTOLOGY.md"
+      - "ontology/**"
+      - "scripts/ingest_readme.py"
+      - "scripts/validate_ontology.py"
+      - ".github/workflows/ontology.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate ontology schema
+        run: python scripts/validate_ontology.py
+
+      - name: Ingest README into ontology objects
+        run: python scripts/ingest_readme.py --output /tmp/toybox-catalog.json
+
+      - name: Validate generated ontology data
+        run: python scripts/validate_ontology.py --data /tmp/toybox-catalog.json
