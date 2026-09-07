@@ -1,0 +1,183 @@
+{
+  "ontology": {
+    "apiName": "toybox",
+    "displayName": "Toybox",
+    "version": "1.0.0",
+    "status": "experimental",
+    "description": "Ontology-first digital twin of the Toybox open-source software catalog."
+  },
+  "sharedProperties": {
+    "name": {"type": "string", "required": true},
+    "description": {"type": "string", "required": false},
+    "status": {
+      "type": "string",
+      "enum": ["experimental", "active", "deprecated", "blocked"],
+      "default": "experimental"
+    },
+    "sourceUrl": {"type": "string", "format": "uri", "required": false},
+    "updatedAt": {"type": "string", "format": "date-time", "required": false}
+  },
+  "interfaces": {
+    "CatalogEntity": {
+      "displayName": "Catalog Entity",
+      "properties": ["name", "description", "status", "sourceUrl", "updatedAt"]
+    },
+    "ExecutableTool": {
+      "displayName": "Executable Tool",
+      "extends": ["CatalogEntity"],
+      "properties": ["executionMode", "licenseClass", "proprietary"]
+    }
+  },
+  "objectTypeGroups": {
+    "catalog": {
+      "displayName": "Catalog",
+      "objectTypes": ["Tool", "Category", "Platform", "Capability", "Interface", "Stamp", "Source", "Policy"]
+    }
+  },
+  "objectTypes": {
+    "Tool": {
+      "displayName": "Tool",
+      "pluralDisplayName": "Tools",
+      "primaryKey": "toolId",
+      "implements": ["CatalogEntity", "ExecutableTool"],
+      "properties": {
+        "toolId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "homepage": {"type": "string", "format": "uri"},
+        "executionMode": {"type": "string", "enum": ["local", "web", "api", "cli", "desktop", "mobile", "embedded", "unknown"], "default": "unknown"},
+        "licenseClass": {"type": "string", "enum": ["open-source", "source-available", "proprietary", "standard", "unknown"], "default": "unknown"},
+        "proprietary": {"type": "boolean", "default": false},
+        "readmeAnchor": {"type": "string"}
+      }
+    },
+    "Category": {
+      "displayName": "Category",
+      "pluralDisplayName": "Categories",
+      "primaryKey": "categoryId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "categoryId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "ordinal": {"type": "integer"}
+      }
+    },
+    "Platform": {
+      "displayName": "Platform",
+      "pluralDisplayName": "Platforms",
+      "primaryKey": "platformId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "platformId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true}
+      }
+    },
+    "Capability": {
+      "displayName": "Capability",
+      "pluralDisplayName": "Capabilities",
+      "primaryKey": "capabilityId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "capabilityId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "riskClass": {"type": "string", "enum": ["routine", "sensitive", "restricted"], "default": "routine"}
+      }
+    },
+    "Interface": {
+      "displayName": "Interface",
+      "pluralDisplayName": "Interfaces",
+      "primaryKey": "interfaceId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "interfaceId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "interfaceType": {"type": "string", "enum": ["cli", "gui", "api", "client", "frontend", "wrapper", "adapter", "other"]}
+      }
+    },
+    "Stamp": {
+      "displayName": "Stamp",
+      "pluralDisplayName": "Stamps",
+      "primaryKey": "stampId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "stampId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "signal": {"type": "string", "enum": ["positive", "neutral", "warning"]}
+      }
+    },
+    "Source": {
+      "displayName": "Source",
+      "pluralDisplayName": "Sources",
+      "primaryKey": "sourceId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "sourceId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "sourceType": {"type": "string", "enum": ["repository", "homepage", "documentation", "catalog", "manual"]}
+      }
+    },
+    "Policy": {
+      "displayName": "Policy",
+      "pluralDisplayName": "Policies",
+      "primaryKey": "policyId",
+      "implements": ["CatalogEntity"],
+      "properties": {
+        "policyId": {"type": "string", "required": true},
+        "name": {"shared": true},
+        "description": {"shared": true},
+        "status": {"shared": true},
+        "sourceUrl": {"shared": true},
+        "updatedAt": {"shared": true},
+        "enforcement": {"type": "string", "enum": ["advisory", "approval-required", "deny"], "default": "advisory"}
+      }
+    }
+  },
+  "linkTypes": {
+    "contains": {"from": "Category", "to": "Tool", "cardinality": "one-to-many"},
+    "runsOn": {"from": "Tool", "to": "Platform", "cardinality": "many-to-many"},
+    "hasCapability": {"from": "Tool", "to": "Capability", "cardinality": "many-to-many"},
+    "hasInterface": {"from": "Tool", "to": "Interface", "cardinality": "one-to-many"},
+    "hasStamp": {"from": "Tool", "to": "Stamp", "cardinality": "many-to-many"},
+    "sourcedFrom": {"from": "Tool", "to": "Source", "cardinality": "many-to-many"},
+    "governedBy": {"from": "Tool", "to": "Policy", "cardinality": "many-to-many"},
+    "alternativeTo": {"from": "Tool", "to": "Tool", "cardinality": "many-to-many"},
+    "dependsOn": {"from": "Tool", "to": "Tool", "cardinality": "many-to-many"}
+  },
+  "actionTypes": {
+    "RegisterTool": {"target": "Tool", "operation": "create", "requiresApproval": false},
+    "UpdateToolMetadata": {"target": "Tool", "operation": "modify", "requiresApproval": false},
+    "SetToolLifecycle": {"target": "Tool", "operation": "modify", "requiresApproval": true},
+    "AttachCapability": {"target": "hasCapability", "operation": "link", "requiresApproval": false},
+    "AttachPlatform": {"target": "runsOn", "operation": "link", "requiresApproval": false},
+    "AttachPolicy": {"target": "governedBy", "operation": "link", "requiresApproval": true},
+    "ApproveTool": {"target": "Tool", "operation": "modify", "requiresApproval": true},
+    "DeprecateTool": {"target": "Tool", "operation": "modify", "requiresApproval": true}
+  }
+}
